@@ -1,5 +1,6 @@
 require 'socket'                 # Get sockets from stdlib
 require 'securerandom'
+require 'digest'
 require_relative 'common'
 
 
@@ -21,8 +22,9 @@ loop {
   _, remote_port, _, remote_ip = client.peeraddr
 
   puts "Client successfully connected #{remote_ip}:#{remote_port}"
-  command = recv_all(client)
-  puts "Command: '#{command}'"
+  msg = recv_all(client)
+  command, args = parse_command(msg)
+  puts "Command: '#{command}', args: '#{args}'"
 
   rs = ''
   case command
@@ -34,6 +36,10 @@ loop {
     rs = "#%06X" % (rand * 0xffffff)
   when 'uuid' then
     rs = SecureRandom.uuid
+  when 'md5' then
+    rs = Digest::MD5.hexdigest(args)
+  when 'sha256' then
+    rs = Digest::SHA256.hexdigest(args)
   else
     rs = "Unrecognized command '#{command}'"
     puts rs
