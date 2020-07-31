@@ -21,3 +21,7 @@ send_command('timenow')
 send_command('uuid')
 send_command('md5', '0123456')
 send_command('sha256', '0123456')
+send_command('valute_USD')
+send_command('valute','USD')
+send_command('valute', 'EUR')
+

@@ -1,13 +1,29 @@
 require 'socket'                 # Get sockets from stdlib
 require 'securerandom'
 require 'digest'
+require 'open-uri'
+require 'nokogiri'
 require_relative 'common'
+
 
 
 host = 'localhost'
 # host = "127.0.0.1"
 # host = "0.0.0.0"
 port = 2000
+
+def getCurrencyExchange(currency)
+  url = "http://www.cbr.ru/scripts/XML_daily.asp"
+
+  doc = Nokogiri::XML(URI.open(url))
+
+  doc.css('Valute').each do |node|
+    ccy = node.css('CharCode').text
+    value = node.css('Value').text
+    return value.sub(',', '.').to_f.round(2).to_s if ccy == currency
+  end
+  return ''
+end
 
 server = TCPServer.open(host, port)    # Socket to listen on port 2000
 puts "Server is starting http://#{host}:#{port}"
@@ -40,6 +56,10 @@ loop {
     rs = Digest::MD5.hexdigest(args)
   when 'sha256' then
     rs = Digest::SHA256.hexdigest(args)
+  when 'valute' then
+    rs = getCurrencyExchange(args)
+  when 'valute_USD' then
+    rs = getCurrencyExchange('USD')
   else
     rs = "Unrecognized command '#{command}'"
     puts rs
