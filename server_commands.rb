@@ -1,3 +1,8 @@
+require 'open-uri'
+require 'nokogiri'
+require 'securerandom'
+require 'digest'
+
 # class Server_commands
 # end
 

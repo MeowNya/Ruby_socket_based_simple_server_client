@@ -1,8 +1,4 @@
 require 'socket'                 # Get sockets from stdlib
-require 'securerandom'
-require 'digest'
-require 'open-uri'
-require 'nokogiri'
 require_relative 'common'
 require_relative 'server_commands'
 
@@ -33,7 +29,6 @@ loop {
   send_all(client, rs)
 
   client.close
-  puts "Client is disconnected"
+  puts 'Client is disconnected'
   puts "\n"
 }
-
