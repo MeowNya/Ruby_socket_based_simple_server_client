@@ -89,7 +89,7 @@ class MD5Command < BaseCommand
   end
 end
 
-class SHA254Command < BaseCommand
+class SHA256Command < BaseCommand
   def run(args='')
     Digest::SHA256.hexdigest(args)
   end
@@ -145,7 +145,7 @@ def process_command(command, args)
   when 'md5' then
     rs = MD5Command.new.run(args)
   when 'sha256' then
-    rs = SHA254Command.new.run(args)
+    rs = SHA256Command.new.run(args)
   when 'valute' then
     rs = ValuteCommand.new.run(args)
   when 'valute_USD' then
