@@ -18,7 +18,6 @@ class BaseCommand
 end
 
 
-
 class RandomCommand < BaseCommand
   def run(args='')
     rand(0...1000000)
@@ -130,34 +129,27 @@ class ValuteCommand < BaseCommand
   end
 end
 
+ALL_COMMANDS = [
+    RandomCommand.new, TimeNowCommand.new,  ColorCommand.new, UUidCommand.new,  MD5Command.new,
+    SHA256Command.new, ValuteCommand.new
+]
 
-def process_command(command, args)
-  rs = ''
-  case command
-  when 'random' then
-    rs = RandomCommand.new.run(0...1000000)
-  when 'timenow' then
-    rs = TimeNowCommand.new.run
-  when 'color' then
-    rs = ColorCommand.new.run
-  when 'uuid' then
-    rs = UUidCommand.new.run
-  when 'md5' then
-    rs = MD5Command.new.run(args)
-  when 'sha256' then
-    rs = SHA256Command.new.run(args)
-  when 'valute' then
-    rs = ValuteCommand.new.run(args)
-  when 'valute_USD' then
-    rs = ValuteCommand.new.run('USD')
-  else
-    rs = "Unrecognized command '#{command}'"
+def process_command(command_name, args='')
+  ALL_COMMANDS.each do |command|
+    return command.run(args) if command.get_name == command_name
   end
-  return rs
+  return ValuteCommand.new.run("USD") if command_name == 'valute_USD'
+  return "Unrecognized command '#{command_name}'"
 end
 
 
 if __FILE__ == $0 then
   command = RandomCommand.new
   puts command.run
+
+  puts process_command('valute_USD')
+  puts process_command('valute_XYU')
+  puts process_command('random')
+  puts process_command('color')
+
 end
