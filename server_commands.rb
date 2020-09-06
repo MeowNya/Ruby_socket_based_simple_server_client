@@ -129,16 +129,29 @@ class ValuteCommand < BaseCommand
   end
 end
 
+class ValuteUsdCommand < ValuteCommand
+  def self.run(args='')
+    super('USD')
+  end
+
+  def self.get_name
+    'valute_USD'
+  end
+
+  def self.get_description
+    'Return Valute USD'
+  end
+end
+
 ALL_COMMANDS = [
     RandomCommand, TimeNowCommand,  ColorCommand, UUidCommand,  MD5Command,
-    SHA256Command, ValuteCommand
+    SHA256Command, ValuteCommand, ValuteUsdCommand
 ]
 
 def process_command(command_name, args='')
   ALL_COMMANDS.each do |command|
     return command.run(args) if command.get_name == command_name
   end
-  return ValuteCommand.run("USD") if command_name == 'valute_USD'
   return "Unrecognized command '#{command_name}'"
 end
 
@@ -147,8 +160,8 @@ if __FILE__ == $0 then
   puts RandomCommand.run
 
   puts process_command('valute_USD')
+  puts process_command('valute', args='USD')
   puts process_command('valute_XYU')
   puts process_command('random')
   puts process_command('color')
-
 end
